@@ -4,6 +4,7 @@ import requests
 import datetime
 import git
 
+
 def task():
     api_json = "api.json"
     api_data = open(api_json, 'r')
@@ -13,7 +14,12 @@ def task():
     before_data = open(status_json, 'r')
     json_before_data = json.load(before_data)
     status_before_data = (json_before_data["status"])
-    long_data = (json_before_data["duration"])
+    before_datetime_y = json_before_data["changeDateTime"]["y"]
+    before_datetime_m = json_before_data["changeDateTime"]["m"]
+    before_datetime_d = json_before_data["changeDateTime"]["d"]
+    before_datetime_H = json_before_data["changeDateTime"]["H"]
+    before_datetime_M = json_before_data["changeDateTime"]["M"]
+    before_datetime_S = json_before_data["changeDateTime"]["S"]
 
     session = requests.Session()
     file_data = session.get(url)
@@ -21,25 +27,57 @@ def task():
     status_data = (json_data["members"])
 
     dt_now = datetime.datetime.now()
+    dt_now_ = dt_now.replace(microsecond = 0)
     dt_now_text = dt_now.strftime('%Y年%m月,%d %H:%M:%S 更新')
 
     if status_data:
         status = "Online"
         if status_before_data == "Online":
-            duration = long_data + 1
+            timelag = dt_now_  - datetime.datetime(year=before_datetime_y, month=before_datetime_m, day=before_datetime_d, hour=before_datetime_H, minute=before_datetime_M, second=before_datetime_S)
+            y = before_datetime_y
+            m = before_datetime_m
+            d = before_datetime_d
+            H = before_datetime_H
+            M = before_datetime_M
+            S = before_datetime_S
         else:
-            duration = 0
+            timelag = 0
+            y = dt_now.year
+            m = dt_now.month
+            d = dt_now.day
+            H = dt_now.hour
+            M = dt_now.minute
+            S = dt_now.second
     else:
         status = "Offline"
         if status_before_data == "Offline":
-            duration = long_data + 1
+            timelag = dt_now_  - datetime.datetime(year=before_datetime_y, month=before_datetime_m, day=before_datetime_d, hour=before_datetime_H, minute=before_datetime_M, second=before_datetime_S)
+            y = before_datetime_y
+            m = before_datetime_m
+            d = before_datetime_d
+            H = before_datetime_H
+            M = before_datetime_M
+            S = before_datetime_S
         else:
-            duration = 1
-
+            timelag = 0
+            y = dt_now.year
+            m = dt_now.month
+            d = dt_now.day
+            H = dt_now.hour
+            M = dt_now.minute
+            S = dt_now.second
     str_json = {
         "status": status,
-        "duration": duration,
-        "date": {
+        "changeDateTime": {
+            "y": y,
+            "m": m,
+            "d": d,
+            "H": H,
+            "M": M,
+            "S": S
+        },
+        "timeLag": timelag,
+        "upDateTime": {
             "y": dt_now.strftime('%Y'),
             "m": dt_now.strftime('%m'),
             "d": dt_now.strftime('%d'),
@@ -49,8 +87,8 @@ def task():
         }
     }
     with open(status_json, 'w') as f:
-        json.dump(str_json, f)
-    f.close
+        str_ = json.dumps(str_json, default=str)
+        f.write(str_)
 
     repo = git.Repo("")
     repo.git.add(status_json)
@@ -58,9 +96,9 @@ def task():
     origin = repo.remote(name='origin')
     origin.push()
 
-    print("出力しました。" + status + "、" + str(duration) + "時間前、" + dt_now_text)
+    print("出力しました。" + status + "、" + dt_now_text)
+
 
 while True:
     task()
-    time.sleep(3600)
-
+    time.sleep(60)
