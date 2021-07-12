@@ -23,7 +23,7 @@ pip install GitPython
 ### 手順
 
 1. Fork してローカルに Clone する。
-2. Discord で自分しか入っていないサーバーをつくる。
+2. Discord で自分だけのサーバーをつくる。(Botも入れてはいけない)
 3. サーバー設定からウィジェットを有効にする。
 4. サーバー id をメモる。
 5. 以下の内容の`api.json`を同じディレクトリに作成する。
@@ -32,7 +32,7 @@ pip install GitPython
 {"url": "https://discordapp.com/api/guilds/"サーバーid"/widget.json"}
 ```
 
-6. `Python script.py`で実行。一時間ごとに自動更新。
+6. `Python script.py`で実行。1分間隔で自動更新。
 
 注意：status-json.json 及び、status-json.json の中身を消すと動かなくなります。
 
