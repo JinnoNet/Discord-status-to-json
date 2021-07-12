@@ -3,6 +3,8 @@ import time
 import requests
 import datetime
 import git
+from requests.packages.urllib3.util.retry import Retry
+from requests.adapters import HTTPAdapter
 
 
 def task():
@@ -21,8 +23,13 @@ def task():
     before_datetime_M = json_before_data["changeDateTime"]["M"]
     before_datetime_S = json_before_data["changeDateTime"]["S"]
 
-    session = requests.Session()
-    file_data = session.get(url)
+    retries = Retry(total=10000,
+                backoff_factor=10,
+                status_forcelist=[ 500, 502, 503, 504 ])
+
+    s = requests.Session()
+    s.mount('https://', HTTPAdapter(max_retries=retries))
+    file_data = s.get(url)
     json_data = json.loads(file_data.text)
     status_data = (json_data["members"])
 
