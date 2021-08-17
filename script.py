@@ -100,10 +100,14 @@ def task():
     repo = git.Repo("")
     repo.git.add(status_json)
     repo.index.commit("update")
-    origin = repo.remote(name='origin')
-    origin.push()
 
-    print("出力しました。" + status + "、" + dt_now_text)
+    try:
+        origin = repo.remote(name='origin')
+    except GitCommandError:
+        print("Errorが発生しました、今回はpushしません")
+    else:
+        origin.push()
+        print("出力しました。" + status + "、" + dt_now_text)
 
 
 while True:
