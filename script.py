@@ -22,7 +22,7 @@ def task():
     before_datetime_H = json_before_data["changeDateTime"]["H"]
     before_datetime_M = json_before_data["changeDateTime"]["M"]
     before_datetime_S = json_before_data["changeDateTime"]["S"]
-    oldTimelag = json_before_data["timeLag"]
+    oldTimelag = int(json_before_data["timeLag"])
 
     retries = Retry(total=10000,
                 backoff_factor=10,
