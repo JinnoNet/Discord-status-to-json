@@ -44,7 +44,7 @@ pip install GitPython
 {
   "status": "Online",
   "changeDateTime": { "y": 2021, "m": 7, "d": 3, "H": 16, "M": 31, "S": 7 },
-  "timeLag": "0:53:32",
+  "timeLag": "12",
   "upDateTime": {
     "y": "2021",
     "m": "07",
@@ -58,5 +58,5 @@ pip install GitPython
 
 - `status` そのままの意味。
 - `changeDateTime` オンライン、オフラインが切り替わった時間。
-- `timeLag` オンライン、オフライン時の長さ。
+- `timeLag` オンライン、オフライン時の長さ(分)。
 - `upDateTime` そのままの意味。

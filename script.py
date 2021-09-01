@@ -22,6 +22,7 @@ def task():
     before_datetime_H = json_before_data["changeDateTime"]["H"]
     before_datetime_M = json_before_data["changeDateTime"]["M"]
     before_datetime_S = json_before_data["changeDateTime"]["S"]
+    oldTimelag = json_before_data["timeLag"]
 
     retries = Retry(total=10000,
                 backoff_factor=10,
@@ -40,7 +41,7 @@ def task():
     if status_data:
         status = "Online"
         if status_before_data == "Online":
-            timelag = dt_now_  - datetime.datetime(year=before_datetime_y, month=before_datetime_m, day=before_datetime_d, hour=before_datetime_H, minute=before_datetime_M, second=before_datetime_S)
+            timelag = oldTimelag + 1
             y = before_datetime_y
             m = before_datetime_m
             d = before_datetime_d
@@ -58,7 +59,7 @@ def task():
     else:
         status = "Offline"
         if status_before_data == "Offline":
-            timelag = dt_now_  - datetime.datetime(year=before_datetime_y, month=before_datetime_m, day=before_datetime_d, hour=before_datetime_H, minute=before_datetime_M, second=before_datetime_S)
+            timelag = oldTimelag + 1
             y = before_datetime_y
             m = before_datetime_m
             d = before_datetime_d
